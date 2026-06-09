@@ -65,18 +65,18 @@ export default function Checkout() {
   }
 
   return (
-    <div className="page-container py-8">
-      <Link to="/cart" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6">
-        <ChevronLeft className="h-4 w-4" /> Back to Cart
+    <div className="max-w-[1500px] mx-auto px-2 xs:px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <Link to="/cart" className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500 hover:text-gray-700 mb-4 sm:mb-6">
+        <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Back to Cart
       </Link>
 
-      <h1 className="text-2xl font-display font-bold text-gray-900 mb-8">Checkout</h1>
+      <h1 className="text-xl sm:text-2xl font-display font-bold text-gray-900 mb-4 sm:mb-8">Checkout</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
-          <div className="card p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="flex flex-col lg:flex-row gap-4 sm:gap-8">
+        <div className="flex-1 space-y-4 sm:space-y-8">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Shipping Address</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <Input label="Full Name" value={address.fullName} onChange={(e) => setAddress({...address, fullName: e.target.value})} required />
               <Input label="Phone Number" value={address.phone} onChange={(e) => setAddress({...address, phone: e.target.value})} required />
               <div className="sm:col-span-2">
@@ -90,21 +90,21 @@ export default function Checkout() {
             </div>
           </div>
 
-          <div className="card p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Method</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Payment Method</h2>
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 sm:gap-3">
               {paymentMethods.map((method) => (
                 <button
                   key={method.id}
                   onClick={() => setPaymentMethod(method.id)}
-                  className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${
+                  className={`flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl border-2 transition-all ${
                     paymentMethod === method.id ? 'border-primary-600 bg-primary-50' : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <method.icon className={`h-6 w-6 ${paymentMethod === method.id ? 'text-primary-600' : 'text-gray-400'}`} />
+                  <method.icon className={`h-5 w-5 sm:h-6 sm:w-6 shrink-0 ${paymentMethod === method.id ? 'text-primary-600' : 'text-gray-400'}`} />
                   <div className="text-left">
-                    <p className="font-medium text-sm text-gray-900">{method.name}</p>
-                    <p className="text-xs text-gray-500">{method.description}</p>
+                    <p className="font-medium text-xs sm:text-sm text-gray-900">{method.name}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500">{method.description}</p>
                   </div>
                 </button>
               ))}
@@ -112,31 +112,31 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="lg:col-span-1">
-          <div className="card p-6 space-y-4 sticky top-24">
-            <h2 className="text-lg font-semibold text-gray-900">Order Summary</h2>
-            <div className="space-y-3 text-sm">
+        <div className="w-full lg:w-80 xl:w-96">
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 space-y-3 sm:space-y-4 lg:sticky lg:top-24">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900">Order Summary</h2>
+            <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
               {cart.items.map((item) => (
-                <div key={item.productId?._id} className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                <div key={item.productId?._id} className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                     <img src={item.productId?.images?.[0]?.url || '/placeholder.svg'} alt="" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-gray-900 truncate">{item.productId?.name}</p>
-                    <p className="text-gray-500">x{item.quantity}</p>
+                    <p className="text-gray-900 truncate text-xs sm:text-sm">{item.productId?.name}</p>
+                    <p className="text-gray-500 text-[10px] sm:text-xs">x{item.quantity}</p>
                   </div>
-                  <span className="font-medium">{(item.price * item.quantity)?.toLocaleString()} RWF</span>
+                  <span className="font-medium text-xs sm:text-sm">{(item.price * item.quantity)?.toLocaleString()} RWF</span>
                 </div>
               ))}
             </div>
-            <div className="border-t pt-3 space-y-2 text-sm">
+            <div className="border-t pt-2 sm:pt-3 space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
               <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{cart.subtotal?.toLocaleString()} RWF</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span className="text-green-600">Free</span></div>
-              <div className="border-t pt-2 flex justify-between font-semibold text-lg">
+              <div className="border-t pt-1.5 sm:pt-2 flex justify-between font-semibold text-base sm:text-lg">
                 <span>Total</span><span>{cart.total?.toLocaleString()} RWF</span>
               </div>
             </div>
-            <Button onClick={handlePlaceOrder} loading={loading} size="lg" className="w-full">
+            <Button onClick={handlePlaceOrder} loading={loading} size="lg" className="w-full text-sm">
               Place Order
             </Button>
           </div>

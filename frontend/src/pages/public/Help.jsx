@@ -12,24 +12,24 @@ const helpTopics = [
 
 export default function Help() {
   return (
-    <div className="page-container py-12">
-      <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-        <Link to="/" className="hover:text-primary-600">Home</Link>
-        <span>/</span>
+    <div className="max-w-[1500px] mx-auto px-2 xs:px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+      <nav className="flex items-center gap-1 xs:gap-2 text-xs xs:text-sm text-gray-500 mb-4 sm:mb-8 overflow-x-auto whitespace-nowrap">
+        <Link to="/" className="hover:text-primary-600 shrink-0">Home</Link>
+        <span className="shrink-0">/</span>
         <span className="text-gray-900">Help Center</span>
       </nav>
 
-      <div className="max-w-2xl mx-auto text-center mb-12">
-        <h1 className="text-4xl font-display font-bold text-gray-900 mb-4">Help Center</h1>
-        <p className="text-lg text-gray-600 mb-6">How can we help you today?</p>
+      <div className="max-w-2xl mx-auto text-center mb-8 sm:mb-12">
+        <h1 className="text-2xl xs:text-3xl sm:text-4xl font-display font-bold text-gray-900 mb-2 sm:mb-4">Help Center</h1>
+        <p className="text-sm sm:text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">How can we help you today?</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6 max-w-4xl mx-auto">
         {helpTopics.map((topic) => (
-          <Link key={topic.title} to={topic.link} className="p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-            <topic.icon className="h-8 w-8 text-primary-600 mb-3" />
-            <h3 className="font-semibold text-gray-900 mb-1">{topic.title}</h3>
-            <p className="text-sm text-gray-600">{topic.desc}</p>
+          <Link key={topic.title} to={topic.link} className="p-4 sm:p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <topic.icon className="h-6 w-6 sm:h-8 sm:w-8 text-primary-600 mb-2 sm:mb-3" />
+            <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-0.5 sm:mb-1">{topic.title}</h3>
+            <p className="text-xs sm:text-sm text-gray-600">{topic.desc}</p>
           </Link>
         ))}
       </div>

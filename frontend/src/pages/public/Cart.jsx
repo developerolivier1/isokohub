@@ -14,7 +14,7 @@ export default function Cart() {
 
   if (!isAuthenticated) {
     return (
-      <div className="page-container py-12">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <EmptyState
           icon={ShoppingBag}
           title="Sign in to view your cart"
@@ -28,7 +28,7 @@ export default function Cart() {
 
   if (!cart?.items?.length) {
     return (
-      <div className="page-container py-12">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <EmptyState
           icon={ShoppingBag}
           title="Your cart is empty"

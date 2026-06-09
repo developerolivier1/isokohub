@@ -57,17 +57,17 @@ export default function Products() {
   };
 
   return (
-    <div className="page-container py-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+    <div className="max-w-[1500px] mx-auto px-2 xs:px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
-          <h1 className="text-2xl font-display font-bold text-gray-900">
+          <h1 className="text-lg xs:text-xl sm:text-2xl font-display font-bold text-gray-900">
             {searchQuery ? `Results for "${searchQuery}"` : activeCategory ? activeCategory : 'All Products'}
           </h1>
-          <p className="text-sm text-gray-500">{total} products found</p>
+          <p className="text-xs sm:text-sm text-gray-500">{total} products found</p>
         </div>
-        <div className="flex items-center gap-3">
-          <button onClick={() => setFiltersOpen(!filtersOpen)} className="btn-ghost btn-sm flex items-center gap-2 lg:hidden">
-            <SlidersHorizontal className="h-4 w-4" /> Filters
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button onClick={() => setFiltersOpen(!filtersOpen)} className="btn-ghost btn-sm flex items-center gap-1.5 lg:hidden text-xs sm:text-sm">
+            <SlidersHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Filters
           </button>
           <select value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }} className="input-field py-1.5 text-sm w-auto">
             <option value="-createdAt">Newest</option>
