@@ -1,0 +1,39 @@
+{
+  "name": "isokohub-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/generate-icons.js && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx",
+    "generate-icons": "node scripts/generate-icons.js",
+    "clean": "node -e \"const{rmSync}=require('fs');['node_modules','dist','node_modules/.vite'].forEach(p=>{try{rmSync(p,{recursive:true,force:true})}catch(e){}})\" && npm install",
+    "clean:cache": "node -e \"const{rmSync}=require('fs');try{rmSync('node_modules/.vite',{recursive:true,force:true})}catch(e){}\""
+  },
+  "dependencies": {
+    "axios": "^1.7.6",
+    "chart.js": "^4.4.4",
+    "lucide-react": "^0.441.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.3.0",
+    "react-query": "^3.39.3",
+    "react-router-dom": "^6.26.2",
+    "react-select": "^5.8.0",
+    "socket.io-client": "^4.7.5",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.9.1",
+    "postcss": "^8.4.44",
+    "tailwindcss": "^3.4.10",
+    "vite": "^5.4.3",
+    "vite-plugin-pwa": "^0.20.1"
+  }
+}
