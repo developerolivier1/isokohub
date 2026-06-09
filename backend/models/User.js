@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+const nodeCrypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
   tenantId: {
@@ -122,7 +122,7 @@ userSchema.pre('save', async function(next) {
 userSchema.pre('save', function(next) {
   if (this.isModified('email') && !this.isNew) {
     this.emailVerified = false;
-    this.emailVerificationToken = crypto.randomBytes(32).toString('hex');
+    this.emailVerificationToken = nodeCrypto.randomBytes(32).toString('hex');
     this.emailVerificationExpire = Date.now() + 24 * 60 * 60 * 1000;
   }
   next();
@@ -133,15 +133,15 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 };
 
 userSchema.methods.generatePasswordResetToken = function() {
-  const resetToken = crypto.randomBytes(32).toString('hex');
-  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  const resetToken = nodeCrypto.randomBytes(32).toString('hex');
+  this.resetPasswordToken = nodeCrypto.createHash('sha256').update(resetToken).digest('hex');
   this.resetPasswordExpire = Date.now() + 60 * 60 * 1000;
   return resetToken;
 };
 
 userSchema.methods.generateEmailVerificationToken = function() {
-  const verifyToken = crypto.randomBytes(32).toString('hex');
-  this.emailVerificationToken = crypto.createHash('sha256').update(verifyToken).digest('hex');
+  const verifyToken = nodeCrypto.randomBytes(32).toString('hex');
+  this.emailVerificationToken = nodeCrypto.createHash('sha256').update(verifyToken).digest('hex');
   this.emailVerificationExpire = Date.now() + 24 * 60 * 60 * 1000;
   return verifyToken;
 };

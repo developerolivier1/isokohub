@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const CloudinaryStorage = require('multer-storage-cloudinary');
 const multer = require('multer');
 const logger = require('../utils/logger');
 
@@ -12,9 +12,9 @@ const configureCloudinary = () => {
   });
 };
 
-const storage = new CloudinaryStorage({
+const storage = CloudinaryStorage({
   cloudinary: cloudinary,
-  params: async (req, file) => {
+  params: (req, file) => {
     const folder = req.baseUrl.split('/')[2] || 'general';
     const publicId = `${folder}/${Date.now()}-${file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_')}`;
     return {

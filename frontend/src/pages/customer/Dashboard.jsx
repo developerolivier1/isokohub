@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Package, Heart, Wallet, User, ShoppingBag, Clock, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Package, Heart, Wallet, User, ShoppingBag, Clock, ArrowRight, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { orderAPI } from '../../services/api';
 import Card from '../../components/ui/Card';
@@ -13,9 +13,15 @@ const statusVariants = {
 };
 
 export default function CustomerDashboard() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   useEffect(() => {
     orderAPI.getAll({ limit: 5 })
@@ -31,7 +37,7 @@ export default function CustomerDashboard() {
         <p className="text-gray-500">Manage your account and orders</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
         {[
           { icon: Package, label: 'My Orders', value: orders.length || 0, to: '/account/orders', color: 'text-blue-600 bg-blue-50' },
           { icon: Heart, label: 'Wishlist', to: '/account/wishlist', color: 'text-red-600 bg-red-50' },
@@ -46,6 +52,12 @@ export default function CustomerDashboard() {
             {item.value !== undefined && <p className="text-xl font-bold text-gray-900">{item.value}</p>}
           </Link>
         ))}
+        <button onClick={handleLogout} className="card p-4 hover:shadow-soft transition-shadow text-left">
+          <div className="p-2.5 rounded-lg w-fit mb-3 text-red-600 bg-red-50">
+            <LogOut className="h-5 w-5" />
+          </div>
+          <p className="text-sm text-gray-500">Sign Out</p>
+        </button>
       </div>
 
       <Card>

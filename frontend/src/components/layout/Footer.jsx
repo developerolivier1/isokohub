@@ -4,11 +4,11 @@ const footerLinks = [
   {
     title: 'Get to Know Us',
     links: [
-      { name: 'Careers', to: '/' },
-      { name: 'Blog', to: '/' },
+      { name: 'Careers', to: '/about' },
+      { name: 'Blog', to: '/about' },
       { name: 'About ISOKOHUB', to: '/about' },
-      { name: 'Investor Relations', to: '/' },
-      { name: 'Press Releases', to: '/' },
+      { name: 'Investor Relations', to: '/about' },
+      { name: 'Press Releases', to: '/about' },
     ],
   },
   {
@@ -17,8 +17,8 @@ const footerLinks = [
       { name: 'Sell products', to: '/auth/register' },
       { name: 'Sell on business', to: '/auth/register' },
       { name: 'Become an affiliate', to: '/account/affiliate' },
-      { name: 'Advertise Your Products', to: '/' },
-      { name: 'Self-Publish with Us', to: '/' },
+      { name: 'Advertise Your Products', to: '/auth/register' },
+      { name: 'Self-Publish with Us', to: '/auth/register' },
     ],
   },
   {
@@ -26,8 +26,8 @@ const footerLinks = [
     links: [
       { name: 'Your Account', to: '/account' },
       { name: 'Your Orders', to: '/account/orders' },
-      { name: 'Shipping Rates & Policies', to: '/' },
-      { name: 'Returns & Replacements', to: '/' },
+      { name: 'Shipping Rates & Policies', to: '/help' },
+      { name: 'Returns & Replacements', to: '/help' },
       { name: 'Help', to: '/help' },
     ],
   },
@@ -36,8 +36,8 @@ const footerLinks = [
     links: [
       { name: 'Your Account', to: '/account' },
       { name: 'Your Orders', to: '/account/orders' },
-      { name: 'Shipping Rates & Policies', to: '/' },
-      { name: 'Returns & Replacements', to: '/' },
+      { name: 'Shipping Rates & Policies', to: '/help' },
+      { name: 'Returns & Replacements', to: '/help' },
       { name: 'Assistant', to: '/help' },
       { name: 'Help', to: '/help' },
     ],
@@ -97,15 +97,8 @@ export default function Footer() {
               <Link to="/products?category=books" className="hover:text-white">ISOKOHUB Books</Link>
               <Link to="/tracking" className="hover:text-white">ISOKOHUB Logistics</Link>
               <Link to="/auth/register" className="hover:text-white">Sell on ISOKOHUB</Link>
-              <Link to="/auth/register" className="hover:text-white">ISOKOHUB Business</Link>
               <Link to="/social" className="hover:text-white">ISOKOHUBGlobal</Link>
               <Link to="/live" className="hover:text-white">ISOKOHUB Rapids</Link>
-              <Link to="/help" className="hover:text-white">ISOKOHUB Web Services</Link>
-              <Link to="/account/wallet" className="hover:text-white">ISOKOHUB Pay</Link>
-              <Link to="/auth/register" className="hover:text-white">ISOKOHUB Business</Link>
-              <Link to="/products?category=music" className="hover:text-white">ISOKOHUB Music</Link>
-              <Link to="/about" className="hover:text-white">ISOKOHUB Ads</Link>
-              <Link to="/products" className="hover:text-white">ISOKOHUB Global</Link>
             </div>
 
             <div className="border-t border-[#334155] pt-4 sm:pt-6 w-full text-center">

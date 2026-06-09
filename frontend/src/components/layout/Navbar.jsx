@@ -11,13 +11,19 @@ const navLinks = [
   { name: 'Sell', href: '/auth/register' },
 ];
 
+const getSellHref = (isAuthenticated, isVendor) => {
+  if (!isAuthenticated) return '/auth/register';
+  if (isVendor) return '/vendor';
+  return '/auth/register';
+};
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [catMenuOpen, setCatMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { user, isAuthenticated, isVendor, isAdmin, logout } = useAuth();
+  const { user, isAuthenticated, isVendor, isAdmin, isCustomer, logout } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
 
@@ -89,7 +95,7 @@ export default function Navbar() {
             <div className="hidden lg:flex items-center gap-1">
               <div className="px-2 py-1 hover:border hover:border-white/40 rounded cursor-pointer">
                 <div className="flex items-center gap-1">
-                  <img src="https://flagcdn.com/w20/us.png" alt="EN" className="h-4 w-6" />
+                  <img src="https://flagcdn.com/w20/rw.png" alt="RW" className="h-4 w-6" />
                   <ChevronDown className="h-3 w-3" />
                 </div>
               </div>
@@ -149,6 +155,13 @@ export default function Navbar() {
               </Link>
             )}
 
+            {isAuthenticated && (
+              <button onClick={handleLogout} className="hidden sm:flex items-center gap-1 px-2 py-1 hover:border hover:border-white/40 rounded cursor-pointer text-left whitespace-nowrap text-white/70 hover:text-white" title="Sign Out">
+                <LogOut className="h-4 w-4" />
+                <span className="text-xs font-bold leading-tight hidden lg:inline">Sign Out</span>
+              </button>
+            )}
+
             <Link to="/account/orders" className="hidden lg:block px-2 py-1 hover:border hover:border-white/40 rounded cursor-pointer text-left whitespace-nowrap">
               <p className="text-[10px] text-white/60 leading-none">Returns</p>
               <p className="text-xs font-bold leading-tight">& Orders</p>
@@ -190,7 +203,7 @@ export default function Navbar() {
               <Menu className="h-4 w-4" /> All
             </button>
             {navLinks.map((link) => (
-              <Link key={link.name} to={link.href} className="px-2 py-1.5 hover:border hover:border-white/40 rounded whitespace-nowrap shrink-0">
+              <Link key={link.name} to={link.name === 'Sell' ? getSellHref(isAuthenticated, isVendor) : link.href} className="px-2 py-1.5 hover:border hover:border-white/40 rounded whitespace-nowrap shrink-0">
                 {link.name}
               </Link>
             ))}
@@ -227,7 +240,7 @@ export default function Navbar() {
             <Link to="/products?deals=true" className="block px-4 py-2.5 text-sm hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Today's Deals</Link>
             <Link to="/help" className="block px-4 py-2.5 text-sm hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Customer Service</Link>
             <Link to="/products?category=gift-cards" className="block px-4 py-2.5 text-sm hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Gift Cards</Link>
-            <Link to="/auth/register" className="block px-4 py-2.5 text-sm hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Sell</Link>
+            <Link to={getSellHref(isAuthenticated, isVendor)} className="block px-4 py-2.5 text-sm hover:bg-gray-100" onClick={() => setMobileOpen(false)}>Sell</Link>
           </div>
         </div>
       )}

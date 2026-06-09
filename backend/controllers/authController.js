@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const nodeCrypto = require('crypto');
 const User = require('../models/User');
 const Tenant = require('../models/Tenant');
 const Wallet = require('../models/Wallet');
@@ -130,7 +130,7 @@ exports.forgotPassword = asyncHandler(async (req, res) => {
 
 exports.resetPassword = asyncHandler(async (req, res) => {
   const { token, password } = req.body;
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const hashedToken = nodeCrypto.createHash('sha256').update(token).digest('hex');
 
   const user = await User.findOne({
     resetPasswordToken: hashedToken,
@@ -173,7 +173,7 @@ exports.sendPhoneOTP = asyncHandler(async (req, res) => {
   const user = req.user;
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
+  const otpHash = nodeCrypto.createHash('sha256').update(otp).digest('hex');
 
   user.meta.set('phoneOtpHash', otpHash);
   user.meta.set('phoneOtpExpire', Date.now() + 10 * 60 * 1000);
@@ -192,7 +192,7 @@ exports.verifyPhoneOTP = asyncHandler(async (req, res) => {
   const { otp } = req.body;
   const user = req.user;
 
-  const otpHash = crypto.createHash('sha256').update(otp).digest('hex');
+  const otpHash = nodeCrypto.createHash('sha256').update(otp).digest('hex');
   const storedHash = user.meta.get('phoneOtpHash');
   const expire = user.meta.get('phoneOtpExpire');
 

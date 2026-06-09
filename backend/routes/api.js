@@ -17,16 +17,69 @@ const adController = require('../controllers/adController');
 const logisticsController = require('../controllers/logisticsController');
 const reportController = require('../controllers/reportController');
 
+// User Management Routes (admin only)
+router.get('/users', protect, authorizeAdmin, async (req, res) => {
+  const User = require('../models/User');
+  const { page = 1, limit = 20, search, role, status } = req.query;
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+  const query = { tenantId: req.tenantId };
+  if (search) query.name = { $regex: search, $options: 'i' };
+  if (role) query.role = role;
+  if (status === 'active') query.isActive = true;
+  else if (status === 'inactive') query.isActive = false;
+
+  const [users, total] = await Promise.all([
+    User.find(query).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)),
+    User.countDocuments(query),
+  ]);
+  res.json({
+    success: true,
+    data: {
+      users: users.map(u => u.toPublicProfile()),
+      pagination: { page: parseInt(page), limit: parseInt(limit), total },
+    },
+  });
+});
+router.get('/users/:id', protect, authorizeAdmin, async (req, res) => {
+  const User = require('../models/User');
+  const user = await User.findOne({ _id: req.params.id, tenantId: req.tenantId });
+  if (!user) return res.status(404).json({ success: false, error: { message: 'User not found' } });
+  res.json({ success: true, data: { user: user.toPublicProfile() } });
+});
+router.put('/users/:id/status', protect, authorizeAdmin, async (req, res) => {
+  const User = require('../models/User');
+  const user = await User.findOne({ _id: req.params.id, tenantId: req.tenantId });
+  if (!user) return res.status(404).json({ success: false, error: { message: 'User not found' } });
+  if (user.role === 'superadmin') return res.status(403).json({ success: false, error: { message: 'Cannot modify superadmin' } });
+  user.isActive = req.body.isActive;
+  await user.save();
+  res.json({ success: true, data: { user: user.toPublicProfile() } });
+});
+router.put('/users/:id/role', protect, authorizeAdmin, async (req, res) => {
+  const User = require('../models/User');
+  const user = await User.findOne({ _id: req.params.id, tenantId: req.tenantId });
+  if (!user) return res.status(404).json({ success: false, error: { message: 'User not found' } });
+  if (user.role === 'superadmin') return res.status(403).json({ success: false, error: { message: 'Cannot modify superadmin' } });
+  const validRoles = ['customer', 'vendor', 'delivery_driver', 'support'];
+  if (!validRoles.includes(req.body.role)) return res.status(400).json({ success: false, error: { message: `Invalid role. Must be one of: ${validRoles.join(', ')}` } });
+  user.role = req.body.role;
+  await user.save();
+  res.json({ success: true, data: { user: user.toPublicProfile() } });
+});
+
+// Auth Routes (no tenant resolution required — these endpoints either don't need a tenant
+// or accept tenantSlug in the body)
+router.post('/auth/register-tenant', authLimiter, authController.registerTenantAdmin);
+router.post('/auth/login', authLimiter, authController.login);
+
+// All subsequent routes require tenant context
 router.use(resolveTenant);
 
-// Auth Routes
 router.post('/auth/register', authLimiter, authController.register);
-router.post('/auth/login', authLimiter, authController.login);
 router.post('/auth/logout', authController.logout);
 router.post('/auth/refresh', authController.refreshToken);
 router.post('/auth/forgot-password', authController.forgotPassword);
 router.post('/auth/reset-password', authController.resetPassword);
-router.post('/auth/register-tenant', authLimiter, authController.registerTenantAdmin);
 router.get('/auth/me', protect, authController.getMe);
 router.put('/auth/profile', protect, authController.updateProfile);
 router.put('/auth/password', protect, authController.updatePassword);
@@ -463,6 +516,7 @@ router.post('/affiliate/register', protect, async (req, res) => {
   res.status(201).json({ success: true, data: { affiliate } });
 });
 router.get('/affiliate/commissions', protect, async (req, res) => {
+  const Affiliate = require('../models/Affiliate');
   const AffiliateCommission = require('../models/AffiliateCommission');
   const affiliate = await Affiliate.findOne({ userId: req.user._id });
   if (!affiliate) return res.status(404).json({ success: false, error: { message: 'Affiliate not found' } });

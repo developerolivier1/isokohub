@@ -87,7 +87,6 @@ const affiliateSchema = new mongoose.Schema({
 
 affiliateSchema.index({ tenantId: 1, referralCode: 1 }, { unique: true });
 affiliateSchema.index({ tenantId: 1, status: 1 });
-affiliateSchema.index({ referralCode: 1 }, { unique: true });
 
 affiliateSchema.pre('validate', function(next) {
   if (!this.referralCode) {

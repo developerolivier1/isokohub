@@ -18,6 +18,12 @@ const resolveTenant = asyncHandler(async (req, res, next) => {
     tenantId = req.user.tenantId;
   } else if (req.query.tenantId) {
     tenantId = req.query.tenantId;
+  } else if (req.body && req.body.tenantSlug) {
+    const tenant = await Tenant.findOne({ slug: req.body.tenantSlug, isActive: true });
+    if (tenant) {
+      tenantId = tenant._id;
+      req.tenant = tenant;
+    }
   } else {
     const host = req.get('host');
     if (host) {
@@ -39,11 +45,18 @@ const resolveTenant = asyncHandler(async (req, res, next) => {
   }
 
   if (!tenantId && process.env.NODE_ENV === 'development') {
-    const defaultTenant = await Tenant.findOne({ isActive: true });
-    if (defaultTenant) {
-      tenantId = defaultTenant._id;
-      req.tenant = defaultTenant;
+    let defaultTenant = await Tenant.findOne({ isActive: true });
+    if (!defaultTenant) {
+      defaultTenant = await Tenant.create({
+        name: 'Default Dev Tenant',
+        slug: 'dev',
+        isActive: true,
+        plan: 'enterprise',
+        planStatus: 'active',
+      });
     }
+    tenantId = defaultTenant._id;
+    req.tenant = defaultTenant;
   }
 
   if (!tenantId) {

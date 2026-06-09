@@ -14,6 +14,7 @@ const navItems = [
   { icon: Layers, label: 'Categories', path: '/admin/categories' },
   { icon: ShoppingBag, label: 'Orders', path: '/admin/orders' },
   { icon: BarChart3, label: 'Reports', path: '/admin/reports' },
+  { icon: Tag, label: 'Coupons', path: '/admin/coupons' },
   { icon: CreditCard, label: 'Subscriptions', path: '/admin/subscriptions' },
   { icon: Settings, label: 'Settings', path: '/admin/settings' },
 ];

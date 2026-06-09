@@ -194,6 +194,13 @@ export const reportAPI = {
   downloadInvoice: (orderId) => api.get(`/reports/invoice/${orderId}`, { responseType: 'blob' }),
 };
 
+export const usersAPI = {
+  getAll: (params) => api.get('/users', { params }),
+  getById: (id) => api.get(`/users/${id}`),
+  updateStatus: (id, isActive) => api.put(`/users/${id}/status`, { isActive }),
+  updateRole: (id, role) => api.put(`/users/${id}/role`, { role }),
+};
+
 export const tenantAPI = {
   getTenant: () => api.get('/tenant'),
   updateTenant: (data) => api.put('/tenant', data),

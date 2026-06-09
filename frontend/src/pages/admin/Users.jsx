@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Users as UsersIcon, MoreVertical, Shield } from 'lucide-react';
-import { authAPI } from '../../services/api';
+import { useState, useEffect, useCallback } from 'react';
+import { Users as UsersIcon, Shield } from 'lucide-react';
+import { usersAPI } from '../../services/api';
 import Card from '../../components/ui/Card';
 import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import SearchInput from '../../components/ui/SearchInput';
+import Pagination from '../../components/ui/Pagination';
 
 const roleVariants = {
   customer: 'default',
@@ -17,16 +19,42 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [actionLoading, setActionLoading] = useState(null);
 
-  useEffect(() => {
-    // This would need a proper admin users endpoint
-    authAPI.getMe()
+  const fetchUsers = useCallback(() => {
+    setLoading(true);
+    const params = { page, limit: 15 };
+    if (search.trim()) params.search = search.trim();
+    usersAPI.getAll(params)
       .then(({ data }) => {
         setUsers(data.data?.users || []);
+        setTotalPages(data.data?.pagination?.total ? Math.ceil(data.data.pagination.total / 15) : 1);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [page, search]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const handleToggleStatus = (userId, currentStatus) => {
+    setActionLoading(userId);
+    usersAPI.updateStatus(userId, !currentStatus)
+      .then(() => fetchUsers())
+      .catch(() => {})
+      .finally(() => setActionLoading(null));
+  };
+
+  const handleRoleChange = (userId, role) => {
+    setActionLoading(userId);
+    usersAPI.updateRole(userId, role)
+      .then(() => fetchUsers())
+      .catch(() => {})
+      .finally(() => setActionLoading(null));
+  };
 
   if (loading) return <div className="flex justify-center py-12"><LoadingSpinner size="lg" /></div>;
 
@@ -67,7 +95,25 @@ export default function Users() {
                     <td className="px-6 py-4"><Badge variant={user.isActive === false ? 'danger' : 'success'}>{user.isActive === false ? 'Inactive' : 'Active'}</Badge></td>
                     <td className="px-6 py-4 text-sm text-gray-500">{new Date(user.createdAt).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
-                      <button className="p-1.5 text-gray-400 hover:text-gray-600"><MoreVertical className="h-4 w-4" /></button>
+                      <div className="flex items-center gap-1">
+                        <select
+                          value={user.role}
+                          onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                          disabled={user.role === 'superadmin'}
+                          className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white disabled:opacity-50"
+                        >
+                          {['customer', 'vendor', 'delivery_driver', 'support'].map(r => (
+                            <option key={r} value={r}>{r}</option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={() => handleToggleStatus(user._id, user.isActive)}
+                          disabled={user.role === 'superadmin' || actionLoading === user._id}
+                          className={`p-1.5 rounded text-xs font-medium ${user.isActive === false ? 'text-green-600 hover:bg-green-50' : 'text-red-600 hover:bg-red-50'} disabled:opacity-50`}
+                        >
+                          {user.isActive === false ? 'Activate' : 'Deactivate'}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -76,6 +122,10 @@ export default function Users() {
           </div>
         )}
       </Card>
+
+      {totalPages > 1 && (
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+      )}
     </div>
   );
 }

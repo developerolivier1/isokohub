@@ -45,7 +45,6 @@ const wishlistSchema = new mongoose.Schema({
 });
 
 wishlistSchema.index({ tenantId: 1, userId: 1 });
-wishlistSchema.index({ shareCode: 1 }, { sparse: true });
 
 wishlistSchema.pre('validate', function(next) {
   if (this.isPublic && !this.shareCode) {

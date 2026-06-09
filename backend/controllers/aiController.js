@@ -154,7 +154,7 @@ exports.assistantQuery = asyncHandler(async (req, res) => {
     case 'return':
       response = 'Returns can be initiated within 30 days of delivery. Go to your Orders, select the item, and click "Return". I can help you start a return if you provide your order number.';
       break;
-    case 'product':
+    case 'product': {
       const products = await Product.find({
         tenantId: req.tenantId,
         status: 'active',
@@ -166,6 +166,7 @@ exports.assistantQuery = asyncHandler(async (req, res) => {
         response = 'I could not find specific products matching your query. Try browsing our categories or use the search bar for more precise results.';
       }
       break;
+    }
     case 'help':
       response = 'I\'m here to help! You can contact our support team via email at support@isokohub.com, call us at +250788000000, or visit our Help Center for FAQs and guides.';
       break;
