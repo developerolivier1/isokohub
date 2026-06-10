@@ -3,17 +3,12 @@ import { Outlet, Link } from 'react-router-dom';
 export default function AuthLayout() {
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-800 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
-        </div>
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gray-900">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1920&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60" />
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
-          <Link to="/" className="flex items-center gap-3 mb-12">
-            <div className="w-10 h-10 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">I</span>
-            </div>
-            <span className="text-2xl font-display font-bold">ISOKOHUB</span>
+          <Link to="/" className="flex items-center mb-12">
+            <img src="/assets/logo.png" alt="ISOKOHUB" className="h-16 w-auto" />
           </Link>
           <h1 className="text-4xl font-display font-bold mb-4">Welcome to the Future of Commerce</h1>
           <p className="text-lg text-white/80 max-w-md">

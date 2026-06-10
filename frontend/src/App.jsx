@@ -47,6 +47,7 @@ import AdminOrders from './pages/admin/Orders';
 import Reports from './pages/admin/Reports';
 import Settings from './pages/admin/Settings';
 import Subscriptions from './pages/admin/Subscriptions';
+import SearchAnalytics from './pages/admin/SearchAnalytics';
 
 const ProtectedRoute = ({ children, roles }) => {
   const { isAuthenticated, user, loading } = useAuth();
@@ -121,6 +122,7 @@ export default function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
         <Route path="subscriptions" element={<Subscriptions />} />
+        <Route path="search-analytics" element={<SearchAnalytics />} />
         <Route path="coupons" element={<CouponManagement />} />
       </Route>
 

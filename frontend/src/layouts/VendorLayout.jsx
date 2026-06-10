@@ -29,11 +29,8 @@ export default function VendorLayout() {
     <div className="min-h-screen bg-gray-50">
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
         <div className="flex items-center justify-between h-16 px-6 border-b">
-          <Link to="/vendor" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">I</span>
-            </div>
-            <span className="text-lg font-display font-bold text-gray-900">Vendor</span>
+          <Link to="/vendor" className="flex items-center">
+            <img src="/assets/logo.png" alt="ISOKOHUB" className="h-10 w-auto" />
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />

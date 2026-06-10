@@ -118,6 +118,7 @@ const seed = async () => {
       contactEmail: 'vendor@isokohub.com',
       contactPhone: '+250788300000',
       address: { street: 'KG 123 Ave', city: 'Kigali', country: 'RW' },
+      location: { type: 'Point', coordinates: [30.0619, -1.9441] },
       status: 'verified',
       isFeatured: true,
       ratings: { average: 4.5, count: 128 },
@@ -193,6 +194,7 @@ const seed = async () => {
     const productData = [
       {
         name: 'iPhone 15 Pro Max',
+        slug: 'iphone-15-pro-max',
         description: 'The most powerful iPhone ever. A17 Pro chip, 48MP camera system, titanium design. Features a 6.7-inch Super Retina XDR display with ProMotion technology.',
         price: 1800000, comparePrice: 2000000, category: phones._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=iPhone+15+Pro+Max', isPrimary: true }],
@@ -202,6 +204,7 @@ const seed = async () => {
       },
       {
         name: 'Samsung Galaxy S24 Ultra',
+        slug: 'samsung-galaxy-s24-ultra',
         description: 'Galaxy AI is here. Built with titanium, Galaxy S24 Ultra features a flat display with Corning Gorilla Armor, 200MP camera, and the built-in S Pen.',
         price: 1650000, comparePrice: 1850000, category: phones._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=Samsung+S24+Ultra', isPrimary: true }],
@@ -211,6 +214,7 @@ const seed = async () => {
       },
       {
         name: 'MacBook Pro 16" M3 Max',
+        slug: 'macbook-pro-16-m3-max',
         description: 'Supercharged by M3 Max chip with up to 128GB unified memory. Stunning 16-inch Liquid Retina XDR display. Up to 22 hours of battery life.',
         price: 4500000, comparePrice: 5000000, category: laptops._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=MacBook+Pro+16', isPrimary: true }],
@@ -220,6 +224,7 @@ const seed = async () => {
       },
       {
         name: 'Traditional Kitenge Dress',
+        slug: 'traditional-kitenge-dress',
         description: 'Beautiful African print kitenge dress, perfect for ceremonies and casual wear. Made from 100% cotton with authentic Rwandan designs.',
         price: 35000, comparePrice: 45000, category: clothing._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=Kitenge+Dress', isPrimary: true }],
@@ -233,6 +238,7 @@ const seed = async () => {
       },
       {
         name: 'Wireless Bluetooth Earbuds',
+        slug: 'wireless-bluetooth-earbuds',
         description: 'Premium wireless earbuds with active noise cancellation, 30-hour battery life, and IPX5 water resistance. Crystal clear calls with AI noise reduction.',
         price: 85000, comparePrice: 120000, category: phones._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=Wireless+Earbuds', isPrimary: true }],
@@ -242,6 +248,7 @@ const seed = async () => {
       },
       {
         name: 'Handwoven Agaseke Basket',
+        slug: 'handwoven-agaseke-basket',
         description: 'Traditional Rwandan peace basket, handwoven by local artisans. Each piece is unique and represents Rwandan culture and heritage.',
         price: 25000, comparePrice: 30000, category: homeGoods._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=Agaseke+Basket', isPrimary: true }],
@@ -250,6 +257,7 @@ const seed = async () => {
       },
       {
         name: 'Smart Watch Pro',
+        slug: 'smart-watch-pro',
         description: 'Advanced smartwatch with health monitoring, GPS tracking, 100+ workout modes, and 14-day battery life. AMOLED display with always-on feature.',
         price: 120000, comparePrice: 150000, category: phones._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=Smart+Watch+Pro', isPrimary: true }],
@@ -259,6 +267,7 @@ const seed = async () => {
       },
       {
         name: 'Organic Rwandan Coffee Beans',
+        slug: 'organic-rwandan-coffee-beans',
         description: 'Premium single-origin Arabica coffee from the highlands of Rwanda. Medium roast with notes of chocolate and citrus. 1kg bag.',
         price: 15000, comparePrice: 18000, category: homeGoods._id,
         images: [{ url: 'https://via.placeholder.com/600x600?text=Coffee+Beans', isPrimary: true }],
@@ -266,6 +275,19 @@ const seed = async () => {
         status: 'active',
       },
     ];
+
+    const warehouse = await Warehouse.create({
+      tenantId: tenant._id,
+      name: 'Main Warehouse Kigali',
+      code: 'KGL-MAIN',
+      type: 'primary',
+      address: { street: 'KK 15 Rd', city: 'Kigali', country: 'RW' },
+      location: { type: 'Point', coordinates: [30.0619, -1.9441] },
+      contactPerson: { name: 'Patrick Manager', phone: '+250788500000', email: 'patrick@isokohub.com' },
+      capacity: { maxItems: 50000, currentItems: 0 },
+      isActive: true,
+      isDefault: true,
+    });
 
     const products = [];
     for (const data of productData) {
@@ -280,13 +302,13 @@ const seed = async () => {
         for (const v of product.variants) {
           await Inventory.create({
             tenantId: tenant._id, productId: product._id, variantId: v._id,
-            sku: v.sku, quantity: v.stock || 10,
+            sku: v.sku, quantity: v.stock || 10, warehouseId: warehouse._id,
           });
         }
       } else {
         await Inventory.create({
           tenantId: tenant._id, productId: product._id,
-          sku: product.sku, quantity: 20,
+          sku: product.sku, quantity: 20, warehouseId: warehouse._id,
         });
       }
       products.push(product);
@@ -335,19 +357,6 @@ const seed = async () => {
       createdBy: adminUser._id,
     });
     logger.info('Coupons created');
-
-    const warehouse = await Warehouse.create({
-      tenantId: tenant._id,
-      name: 'Main Warehouse Kigali',
-      code: 'KGL-MAIN',
-      type: 'primary',
-      address: { street: 'KK 15 Rd', city: 'Kigali', country: 'RW' },
-      location: { type: 'Point', coordinates: [30.0619, -1.9441] },
-      contactPerson: { name: 'Patrick Manager', phone: '+250788500000', email: 'patrick@isokohub.com' },
-      capacity: { maxItems: 50000, currentItems: 0 },
-      isActive: true,
-      isDefault: true,
-    });
 
     await Warehouse.create({
       tenantId: tenant._id,

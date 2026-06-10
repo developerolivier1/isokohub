@@ -15,6 +15,7 @@
     "test": "mocha tests/**/*.test.js --timeout 10000"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^9.4.2",
     "axios": "^1.7.6",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.10.0",

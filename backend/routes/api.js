@@ -5,6 +5,8 @@ const { protect, optionalAuth } = require('../middleware/auth');
 const { authorize, authorizeVendor, authorizeAdmin, authorizeSuperAdmin } = require('../middleware/rbac');
 const { resolveTenant, requireTenantFeature, checkTenantCapacity } = require('../middleware/tenant');
 const { authLimiter } = require('../middleware/rateLimiter');
+const searchOptimizer = require('../middleware/searchOptimizer');
+const { searchMetrics, trackSearchResults } = require('../middleware/searchMetrics');
 
 const authController = require('../controllers/authController');
 const productController = require('../controllers/productController');
@@ -16,6 +18,7 @@ const liveController = require('../controllers/liveController');
 const adController = require('../controllers/adController');
 const logisticsController = require('../controllers/logisticsController');
 const reportController = require('../controllers/reportController');
+const searchController = require('../controllers/searchController');
 
 // User Management Routes (admin only)
 router.get('/users', protect, authorizeAdmin, async (req, res) => {
@@ -319,6 +322,62 @@ router.get('/ai/autocomplete', aiController.getAutocomplete);
 router.get('/ai/trending', aiController.getTrendingProducts);
 router.post('/ai/assistant', optionalAuth, aiController.assistantQuery);
 router.get('/ai/feed', optionalAuth, aiController.getPersonalizedFeed);
+
+// ============================================
+// SEARCH & DISCOVERY ENGINE
+// ============================================
+
+// Search metrics & monitoring middleware
+router.use('/search', searchMetrics, trackSearchResults);
+
+// Search engine health & monitor endpoint
+router.get('/search/health', protect, authorizeAdmin, (req, res) => {
+  const searchMonitor = require('../services/searchMonitor');
+  const esClient = require('../config/elasticsearch');
+  res.json({
+    success: true,
+    data: {
+      health: searchMonitor.getHealthStatus(),
+      metrics: searchMonitor.getMetrics(),
+      engineBreakdown: searchMonitor.getEngineBreakdown(),
+      elasticsearch: {
+        connected: esClient.isElasticsearchConnected(),
+      },
+    },
+  });
+});
+
+// Core Search — uses searchOptimizer middleware for query optimization
+router.get('/search', optionalAuth, searchOptimizer, searchController.search);
+
+// Autocomplete & Suggestions
+router.get('/search/autocomplete', searchController.autocomplete);
+router.get('/search/suggestions', searchController.suggestions);
+
+// Trending Searches
+router.get('/search/trending', searchController.trending);
+
+// Specialized Search Types
+router.get('/search/barcode/:code', searchController.barcodeSearch);
+router.get('/search/semantic', optionalAuth, searchController.semanticSearch);
+router.post('/search/voice', optionalAuth, searchController.voiceSearch);
+router.post('/search/image', optionalAuth, searchController.imageSearch);
+router.post('/search/multi-language', optionalAuth, searchOptimizer, searchController.multiLanguageSearch);
+
+// Search Event Tracking
+router.post('/search/track/click', optionalAuth, searchController.trackClick);
+router.post('/search/track/conversion', optionalAuth, searchController.trackConversion);
+router.post('/search/track/bounce', optionalAuth, searchController.trackBounce);
+router.post('/search/track/dwell-time', optionalAuth, searchController.trackDwellTime);
+
+// Search History (requires auth)
+router.get('/search/history', protect, searchController.getSearchHistory);
+router.delete('/search/history', protect, searchController.clearSearchHistory);
+
+// Search Analytics & Admin
+router.get('/search/analytics', protect, authorizeAdmin, searchController.getSearchAnalytics);
+router.post('/search/reindex', protect, authorizeAdmin, searchController.reindex);
+router.post('/search/indexes/sync', protect, authorizeAdmin, searchController.createSearchIndex);
 
 // Live Stream Routes
 router.get('/live', liveController.getLiveStreams);

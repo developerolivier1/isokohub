@@ -70,13 +70,8 @@ export default function Footer() {
         <div className="max-w-[1500px] mx-auto px-4 sm:px-8 py-6 sm:py-8">
           <div className="flex flex-col items-center gap-4 sm:gap-6">
             <div className="flex flex-col xs:flex-row items-center gap-3 sm:gap-6">
-              <Link to="/" className="flex items-end gap-1">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-blue-400 to-blue-600 rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-[10px] sm:text-xs">I</span>
-                </div>
-                <span className="text-base sm:text-lg font-bold tracking-tight leading-none">
-                  isokohub<span className="text-blue-400">.com</span>
-                </span>
+              <Link to="/" className="flex items-center">
+                <img src="/assets/logo.png" alt="ISOKOHUB" className="h-10 sm:h-12 w-auto" />
               </Link>
               <div className="flex gap-1.5 sm:gap-2">
                 {['English', 'RWF - RWF', 'Rwanda'].map((label) => (

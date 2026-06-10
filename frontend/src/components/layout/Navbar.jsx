@@ -51,13 +51,8 @@ export default function Navbar() {
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
 
-            <Link to="/" className="flex items-end gap-1 shrink-0 px-1 sm:px-2 py-1 hover:border hover:border-white/40 rounded">
-              <div className="w-7 h-7 bg-gradient-to-br from-blue-400 to-blue-600 rounded flex items-center justify-center">
-                <span className="text-white font-bold text-xs">I</span>
-              </div>
-              <span className="text-lg sm:text-xl font-bold tracking-tight leading-none">
-                isokohub<span className="text-blue-400">.com</span>
-              </span>
+            <Link to="/" className="flex items-center shrink-0 px-1 sm:px-2 py-1 hover:border hover:border-white/40 rounded">
+              <img src="/assets/logo.png" alt="ISOKOHUB" className="h-10 sm:h-12 w-auto" />
             </Link>
 
             <div className="hidden lg:flex items-center px-2 py-1 hover:border hover:border-white/40 rounded cursor-pointer shrink-0">
@@ -156,9 +151,9 @@ export default function Navbar() {
             )}
 
             {isAuthenticated && (
-              <button onClick={handleLogout} className="hidden sm:flex items-center gap-1 px-2 py-1 hover:border hover:border-white/40 rounded cursor-pointer text-left whitespace-nowrap text-white/70 hover:text-white" title="Sign Out">
+              <button onClick={handleLogout} className="flex items-center gap-1 px-2 py-1 hover:border hover:border-white/40 rounded cursor-pointer text-left whitespace-nowrap text-white/70 hover:text-white" title="Sign Out">
                 <LogOut className="h-4 w-4" />
-                <span className="text-xs font-bold leading-tight hidden lg:inline">Sign Out</span>
+                <span className="text-xs font-bold leading-tight inline">Sign Out</span>
               </button>
             )}
 

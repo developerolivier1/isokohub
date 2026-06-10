@@ -84,6 +84,7 @@ const seedUsers = async () => {
       contactEmail: 'vendor@isokohub.com',
       contactPhone: '+250788300000',
       address: { street: 'KG 123 Ave', city: 'Kigali', country: 'RW' },
+      location: { type: 'Point', coordinates: [30.0619, -1.9441] },
       status: 'verified',
       isFeatured: true,
       ratings: { average: 4.5, count: 128 },

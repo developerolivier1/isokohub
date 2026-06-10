@@ -131,6 +131,28 @@ export const aiAPI = {
   getFeed: () => api.get('/ai/feed'),
 };
 
+export const searchAPI = {
+  search: (params) => api.get('/search', { params }),
+  autocomplete: (q) => api.get('/search/autocomplete', { params: { q } }),
+  suggestions: (q) => api.get('/search/suggestions', { params: { q } }),
+  trending: (params) => api.get('/search/trending', { params }),
+  barcode: (code) => api.get(`/search/barcode/${code}`),
+  semantic: (params) => api.get('/search/semantic', { params }),
+  voice: (data) => api.post('/search/voice', data),
+  image: (data) => api.post('/search/image', data),
+  multiLanguage: (params) => api.post('/search/multi-language', params),
+  trackClick: (data) => api.post('/search/track/click', data),
+  trackConversion: (data) => api.post('/search/track/conversion', data),
+  trackBounce: (data) => api.post('/search/track/bounce', data),
+  trackDwellTime: (data) => api.post('/search/track/dwell-time', data),
+  getHistory: (params) => api.get('/search/history', { params }),
+  clearHistory: () => api.delete('/search/history'),
+  getAnalytics: (params) => api.get('/search/analytics', { params }),
+  getHealth: () => api.get('/search/health'),
+  reindex: () => api.post('/search/reindex'),
+  syncIndexes: () => api.post('/search/indexes/sync'),
+};
+
 export const liveAPI = {
   getAll: (params) => api.get('/live', { params }),
   getById: (id) => api.get(`/live/${id}`),

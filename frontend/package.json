@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-icons.js && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx",
     "generate-icons": "node scripts/generate-icons.js",

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Package, Users, ShoppingBag, BarChart3, Settings,
-  Store, CreditCard, Menu, X, LogOut, ChevronDown, Bell, Tag, Layers
+  Store, CreditCard, Menu, X, LogOut, ChevronDown, Bell, Tag, Layers, Search
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,6 +14,7 @@ const navItems = [
   { icon: Layers, label: 'Categories', path: '/admin/categories' },
   { icon: ShoppingBag, label: 'Orders', path: '/admin/orders' },
   { icon: BarChart3, label: 'Reports', path: '/admin/reports' },
+  { icon: Search, label: 'Search Analytics', path: '/admin/search-analytics' },
   { icon: Tag, label: 'Coupons', path: '/admin/coupons' },
   { icon: CreditCard, label: 'Subscriptions', path: '/admin/subscriptions' },
   { icon: Settings, label: 'Settings', path: '/admin/settings' },
@@ -34,11 +35,8 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-gray-50">
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-800">
-          <Link to="/admin" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">I</span>
-            </div>
-            <span className="text-lg font-display font-bold text-white">ISOKOHUB</span>
+          <Link to="/admin" className="flex items-center">
+            <img src="/assets/logo.png" alt="ISOKOHUB" className="h-10 w-auto" />
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-white">
             <X className="h-5 w-5" />
